@@ -1,7 +1,15 @@
 use redis
 
+import redis
+
 info : RedisInfo
 redis := Redis new(null, 0, 10000)
+
+if (redis == null) {
+  "Could not connect to redis server.  Please start the server first." println()
+   exit(1)
+}
+
 rc := redis info(info&)
 
 printf("info returned %d\n", rc)
