@@ -1,6 +1,36 @@
+include sys/time
+
 use redis
 
 import redis
+import os/Time
+import math/Random
+
+start = 0 : Long
+
+timer: func (reset: Bool) -> Long {
+//  static start=0 : Long   
+  tv: TimeVal
+  
+  gettimeofday(tv&, null)
+
+  /* return timediff */
+  if (!reset) {
+    stop = (tv tv_sec as Long)*1000 + (tv tv_usec)/1000 : Long
+    return (stop - start) as Long
+  }
+
+  /* reset timer */
+  start = (tv tv_sec as Long)*1000 + (tv tv_usec)/1000 : Long
+
+  return 0 as Long
+}
+
+getrandom: func (max: ULong) -> ULong {
+  1 + ( (max as Double) * (rand() / (INT_MAX + 1.0) ) ) as ULong
+}
+
+("Random: " + getrandom(10)) println()
 
 info : RedisInfo
 redis := Redis new(null, 0, 10000)
@@ -9,6 +39,7 @@ if (redis == null) {
   "Could not connect to redis server.  Please start the server first." println()
    exit(1)
 }
+
 
 rc := redis info(info&)
 
@@ -39,3 +70,4 @@ printf("> vm_enabled: %d\n", info vm_enabled);
 printf("> role: %d\n", info role);
 
 redis close()
+
